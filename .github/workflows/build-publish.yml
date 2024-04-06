@@ -5,6 +5,11 @@ name: Release plugp100
 
 on:
   workflow_dispatch:
+    inputs:
+      skip_pypi_publish:
+        description: 'Skip PyPI publish'
+        default: 'false'
+        required: false
   push:
     branches:
       - main
@@ -102,6 +107,7 @@ jobs:
           ls -R
 
       - name: Publish source distribution to PyPi
+        if: ${{ github.event.inputs.skip_pypi_publish != 'true' }}
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
