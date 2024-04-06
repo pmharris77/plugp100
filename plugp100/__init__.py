@@ -12,8 +12,8 @@ if os.path.exists(vendor_dir):
         sys.path.append(os.path.join(vendor_dir, vendor_path))
 
 from plugp100.responses import *
-from plugp100.requests import *
+from plugp100.api.requests import *
 from plugp100.api import *
 from plugp100.common import *
 
-__version__ = "4.0.3"
+__version__ = "5.0.0-dev.6"
