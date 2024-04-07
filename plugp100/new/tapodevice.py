@@ -1,12 +1,10 @@
-import abc
 import dataclasses
 import logging
-from abc import abstractmethod
-from typing import Optional, TypeVar, Type, Dict, Any, Generic
+from typing import Optional, TypeVar, Type, Dict, Any
 
 from plugp100.api.requests.tapo_request import TapoRequest
 from plugp100.api.tapo_client import TapoClient
-from plugp100.common.functional.tri import Try
+from plugp100.new.components.countdown import Countdown
 from plugp100.new.components.device_component import DeviceComponent
 from plugp100.new.components.overheat_component import OverheatComponent
 from plugp100.new.device_type import DeviceType
@@ -85,6 +83,8 @@ class TapoDevice:
         for feature in self._get_components_to_activate(components):
             self.add_component(feature)
         self.add_component(OverheatComponent())
+        if components.has("countdown"):
+            self.add_component(Countdown(self.client))
 
     def _get_components_to_activate(self, components: Components) -> list[C]:
         return []
@@ -142,6 +142,10 @@ class TapoDevice:
     @property
     def wifi_info(self) -> "WifiInfo":
         return WifiInfo(self.device_info.signal_level, self.device_info.rssi)
+
+    @property
+    def has_countdown(self) -> bool:
+        return self.has_component(Countdown)
 
     async def _negotiate_components(self) -> Components:
         if self._child_id:

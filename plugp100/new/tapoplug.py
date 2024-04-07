@@ -40,5 +40,4 @@ class TapoPlug(TapoDevice):
             active_components.append(EnergyComponent(self.client))
         if components.has("control_child"):
             active_components.append(SocketChildrenComponent(self, self.client))
-
         return active_components
