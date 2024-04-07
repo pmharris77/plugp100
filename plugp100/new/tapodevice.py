@@ -4,12 +4,14 @@ from typing import Optional, TypeVar, Type, Dict, Any
 
 from plugp100.api.requests.tapo_request import TapoRequest
 from plugp100.api.tapo_client import TapoClient
+from plugp100.common.functional.tri import Try
 from plugp100.new.components.countdown import Countdown
 from plugp100.new.components.device_component import DeviceComponent
 from plugp100.new.components.overheat_component import OverheatComponent
 from plugp100.new.device_type import DeviceType
 from plugp100.responses.components import Components
 from plugp100.responses.device_state import DeviceInfo
+from plugp100.responses.firmware import LatestFirmware, FirmwareDownloadProgress
 
 _LOGGER = logging.getLogger("TapoDevice")
 
@@ -25,12 +27,12 @@ class LastUpdate:
 
 class TapoDevice:
     def __init__(
-        self,
-        host: str,
-        port: Optional[int],
-        client: TapoClient,
-        device_type: DeviceType = DeviceType.Unknown,
-        child_id: Optional[str] = None,
+            self,
+            host: str,
+            port: Optional[int],
+            client: TapoClient,
+            device_type: DeviceType = DeviceType.Unknown,
+            child_id: Optional[str] = None,
     ):
         self.host = host
         self.port = port
@@ -146,6 +148,31 @@ class TapoDevice:
     @property
     def has_countdown(self) -> bool:
         return self.has_component(Countdown)
+
+    async def get_latest_firmware(self) -> Try[LatestFirmware]:
+        request = TapoRequest(method="get_latest_fw", params=None)
+        if self._child_id:
+            response = await self.client.control_child(self._child_id, request)
+        else:
+            response = await self.client.execute_raw_request(request)
+        return response.map(lambda x: LatestFirmware.from_json(x))
+
+    async def get_firmware_download_state(self) -> Try[FirmwareDownloadProgress]:
+        request = TapoRequest(method="get_fw_download_state", params=None)
+        if self._child_id:
+            response = await self.client.control_child(self._child_id, request)
+        else:
+            response = await self.client.execute_raw_request(request)
+        return response.map(lambda x: FirmwareDownloadProgress.from_json(x))
+
+    async def start_firmware_upgrade(self) -> bool:
+        request = TapoRequest(method="fw_download", params=None)
+        if self._child_id:
+            response = await self.client.control_child(self._child_id, request)
+        else:
+            response = await self.client.execute_raw_request(request)
+        return response.map(lambda _: True) \
+            .get_or_else(False)
 
     async def _negotiate_components(self) -> Components:
         if self._child_id:
