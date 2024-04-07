@@ -56,7 +56,7 @@ class TapoDevice:
 
     async def update(self):
         if self._last_update is None:
-            _LOGGER.info("Initializing device...")
+            _LOGGER.debug("Initializing device...")
             components = await self._negotiate_components()
             await self._setup_components(components)
         else:
@@ -74,7 +74,7 @@ class TapoDevice:
             device_info=DeviceInfo(**state), components=components, raw_state=state
         )
         await self._update_from_state(state)
-        _LOGGER.info("Fetching component updates...")
+        _LOGGER.debug("Fetching component updates...")
         for _, component in self._active_components.items():
             await component.update(state)
 

@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Optional
 
 from plugp100.api.tapo_client import TapoClient
@@ -13,6 +14,8 @@ from plugp100.new.child.tapohubchildren import (
 from plugp100.new.components.device_component import DeviceComponent
 from plugp100.new.tapodevice import TapoDevice
 from plugp100.responses.hub_childs.hub_child_base_info import HubChildBaseInfo
+
+_LOGGER = logging.getLogger("HubChildrenComponent")
 
 
 class HubChildrenComponent(DeviceComponent):
@@ -33,7 +36,12 @@ class HubChildrenComponent(DeviceComponent):
             # _LOGGER.info("Initializing %s children", children.sum)
             for child in children.get_children_base_info():
                 child_device = _hub_child_create(self._parent_device, self._client, child)
-                self._children.append(child_device)
+                if child_device is not None:
+                    self._children.append(child_device)
+                else:
+                    _LOGGER.warning("Found child device not supported, model {}", child.model)
+                    _LOGGER.warning(
+                        "Please request support by opening an issue to https://github.com/petretiandrea/plugp100/issues/new")
 
             for child_device in self._children:
                 await child_device.update()
@@ -44,7 +52,7 @@ class HubChildrenComponent(DeviceComponent):
                 child
                 for child in self.children
                 if child.device_id is not None
-                and model_filter.lower() in child.model.lower()
+                   and model_filter.lower() in child.model.lower()
             ),
             None,
         )
@@ -52,9 +60,9 @@ class HubChildrenComponent(DeviceComponent):
 
 # TODO: make based on device type
 def _hub_child_create(
-    parent_device: TapoDevice,
-    client: TapoClient,
-    child_info: HubChildBaseInfo,
+        parent_device: TapoDevice,
+        client: TapoClient,
+        child_info: HubChildBaseInfo,
 ) -> Optional[TapoDevice]:
     model = child_info.model.lower()
     if "t31" in model:

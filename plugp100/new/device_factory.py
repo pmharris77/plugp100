@@ -41,7 +41,7 @@ async def connect(
 ):
     if config.device_type is None:
         protocol = await _get_or_guess_protocol(config, session)
-        _LOGGER.info(
+        _LOGGER.debug(
             "Not enough information to detected device type and model, trying to fetching from device..."
         )
         device_info = DeviceInfo(
@@ -93,12 +93,12 @@ async def _guess_protocol(
     for protocol in protocols:
         info = await protocol.send_request(device_info_request)
         if info.is_success():
-            _LOGGER.info(f"Found working protocol {type(protocol)}")
+            _LOGGER.debug(f"Found working protocol {type(protocol)}")
             return protocol
         else:
-            _LOGGER.info(f"Protocol {type(protocol)} not working, trying next...")
+            _LOGGER.debug(f"Protocol {type(protocol)} not working, trying next...")
 
-    _LOGGER.info("None of available protocol is working, maybe invalid credentials")
+    _LOGGER.error("None of available protocol is working, maybe invalid credentials")
     raise InvalidAuthentication(config.host, config.device_type)
 
 
