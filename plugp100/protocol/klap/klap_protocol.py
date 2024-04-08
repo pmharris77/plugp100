@@ -78,7 +78,7 @@ class KlapProtocol(TapoProtocol):
     async def _send_request(self, request: TapoRequest, retry: int = 1) -> dict[str, Any]:
         if (
             self._klap_session is None
-            or not self._klap_session.is_handshake_session_expired()
+            or self._klap_session.is_handshake_session_expired()
         ):
             self._klap_session = None
             self._klap_session = await self.perform_handshake()
