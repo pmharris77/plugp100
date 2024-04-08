@@ -59,7 +59,8 @@ jobs:
   publish_pypi:
     name: Publish to PyPi
     runs-on: ubuntu-latest
-#    needs: [ build_vendoring_wheels ]
+    environment: release
+    #    needs: [ build_vendoring_wheels ]
 
     steps:
       - name: Checkout repository
