@@ -179,8 +179,7 @@ class KlapProtocol(TapoProtocol):
             )
             if blank_seed_auth_hash == server_hash:
                 logger.debug(
-                    "Server response doesn't match our expected hash on url {} but an authentication with blank credentials matched",
-                    self._base_url,
+                    f"Server response doesn't match our expected hash on url {self._base_url} but an authentication with blank credentials matched"
                 )
                 return local_seed, remote_seed, blank_auth_hash
             else:
@@ -198,8 +197,7 @@ class KlapProtocol(TapoProtocol):
                 if kasa_setup_seed_auth_hash == server_hash:
                     self.local_auth_hash = kasa_setup_auth_hash
                     logger.debug(
-                        "Server response doesn't match our expected hash on url {} but an authentication with kasa setup credentials matched",
-                        self._base_url,
+                        f"Server response doesn't match our expected hash on url {self._base_url} but an authentication with kasa setup credentials matched"
                     )
                     return local_seed, remote_seed, kasa_setup_auth_hash
                 else:

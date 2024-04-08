@@ -39,7 +39,7 @@ class HubChildrenComponent(DeviceComponent):
                 if child_device is not None:
                     self._children.append(child_device)
                 else:
-                    _LOGGER.warning("Found child device not supported, model {}", child.model)
+                    _LOGGER.warning(f"Found child device not supported, model {child.model}", )
                     _LOGGER.warning(
                         "Please request support by opening an issue to https://github.com/petretiandrea/plugp100/issues/new")
 
