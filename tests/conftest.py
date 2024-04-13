@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any, cast
 from unittest.mock import patch, AsyncMock
 
-import aiohttp
 import pytest
 
 from plugp100.api.requests.tapo_request import (
@@ -11,13 +10,11 @@ from plugp100.api.requests.tapo_request import (
     ControlChildParams,
     MultipleRequestParams,
 )
-from plugp100.api.tapo_client import TapoClient
 from plugp100.common.credentials import AuthCredential
 from plugp100.common.functional.tri import Try
 from plugp100.new.device_factory import DeviceConnectConfiguration, connect
 from plugp100.new.tapodevice import TapoDevice
 from plugp100.protocol.tapo_protocol import TapoProtocol
-
 from plugp100.responses.tapo_response import TapoResponse
 
 plug = pytest.mark.parametrize("device", ["p100.json", "p105.json"], indirect=True)
