@@ -39,9 +39,12 @@ class HubChildrenComponent(DeviceComponent):
                 if child_device is not None:
                     self._children.append(child_device)
                 else:
-                    _LOGGER.warning(f"Found child device not supported, model {child.model}", )
                     _LOGGER.warning(
-                        "Please request support by opening an issue to https://github.com/petretiandrea/plugp100/issues/new")
+                        f"Found child device not supported, model {child.model}",
+                    )
+                    _LOGGER.warning(
+                        "Please request support by opening an issue to https://github.com/petretiandrea/plugp100/issues/new"
+                    )
 
             for child_device in self._children:
                 await child_device.update()
@@ -52,7 +55,7 @@ class HubChildrenComponent(DeviceComponent):
                 child
                 for child in self.children
                 if child.device_id is not None
-                   and model_filter.lower() in child.model.lower()
+                and model_filter.lower() in child.model.lower()
             ),
             None,
         )
@@ -60,9 +63,9 @@ class HubChildrenComponent(DeviceComponent):
 
 # TODO: make based on device type
 def _hub_child_create(
-        parent_device: TapoDevice,
-        client: TapoClient,
-        child_info: HubChildBaseInfo,
+    parent_device: TapoDevice,
+    client: TapoClient,
+    child_info: HubChildBaseInfo,
 ) -> Optional[TapoDevice]:
     model = child_info.model.lower()
     if "t31" in model:

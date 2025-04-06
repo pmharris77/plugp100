@@ -85,9 +85,13 @@ class DiscoveredDevice:
             )
         else:
             logging.warning(
-                f"No encryption schema found for discovered device {self.ip} {self.device_type}")
+                f"No encryption schema found for discovered device {self.ip} {self.device_type}"
+            )
             config = DeviceConnectConfiguration(
-                host=self.ip, port=80, device_type=self.device_type, credentials=credentials
+                host=self.ip,
+                port=80,
+                device_type=self.device_type,
+                credentials=credentials,
             )
         return await connect(config, session)
 

@@ -27,12 +27,12 @@ class LastUpdate:
 
 class TapoDevice:
     def __init__(
-            self,
-            host: str,
-            port: Optional[int],
-            client: TapoClient,
-            device_type: DeviceType = DeviceType.Unknown,
-            child_id: Optional[str] = None,
+        self,
+        host: str,
+        port: Optional[int],
+        client: TapoClient,
+        device_type: DeviceType = DeviceType.Unknown,
+        child_id: Optional[str] = None,
     ):
         self.host = host
         self.port = port
@@ -171,8 +171,7 @@ class TapoDevice:
             response = await self.client.control_child(self._child_id, request)
         else:
             response = await self.client.execute_raw_request(request)
-        return response.map(lambda _: True) \
-            .get_or_else(False)
+        return response.map(lambda _: True).get_or_else(False)
 
     async def _negotiate_components(self) -> Components:
         if self._child_id:

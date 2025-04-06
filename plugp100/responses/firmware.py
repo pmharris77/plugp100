@@ -33,7 +33,7 @@ class FirmwareDownloadStatus(enum.Enum):
     DOWNLOAD_FAIL = -1001
     CHECK_FAIL = -1002
     TRANSFER_FAIL = -1003
-    LOW_BATTERY = - 1004
+    LOW_BATTERY = -1004
 
 
 @dataclasses.dataclass
@@ -51,5 +51,5 @@ class FirmwareDownloadProgress:
             download_in_progress=data.get("download_progress", 0),
             reboot_time=data.get("reboot_time", 0),
             upgrade_time=data.get("upgrade_time", 0),
-            auto_upgrade=data.get("auto_upgrade", False)
+            auto_upgrade=data.get("auto_upgrade", False),
         )
