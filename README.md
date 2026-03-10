@@ -6,6 +6,13 @@ The purpose of this fork is to provide the library as PyPi package.
 # How to install
 ```pip install plugp100```
 
+## Development
+```bash
+uv sync
+uv run pytest tests/unit
+uv run black --check .
+```
+
 ## Library Architecture
 The library was rewritten by taking inspiration from [Component Gaming Design Pattern](https://gameprogrammingpatterns.com/component.html) to achieve better decoupling from device and its capabilities.
 Each Tapo Device, now, is something like a container of Device Component. A Device Component represent a specific feature, so a Tapo Device can be composed by multiple device component.

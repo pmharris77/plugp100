@@ -42,29 +42,31 @@ jobs:
             didn't match the configured pattern. Please ensure that the subject
             doesn't start with an uppercase character.
           wip: true
-  black:
+  checks:
     name: Linting & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - name: "Install python requirements"
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          python-version: '3.12'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Sync dependencies
+        run: uv sync --group dev
       - name: "Check style"
         run: |
-          black --check --verbose .
+          uv run black --check --verbose .
       - name: "Test code"
         run: |
-          pytest \
+          uv run pytest \
             --durations=10 \
             --cov-fail-under=60 \
             --junitxml=pytest.xml \
             --cov-report=term-missing:skip-covered \
-            --cov=app \
+            --cov=plugp100 \
             -p no:sugar \
             tests/unit | tee pytest-coverage.txt
       - name: Pytest coverage comment
