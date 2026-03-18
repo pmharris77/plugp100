@@ -77,6 +77,7 @@ def _mock_klap_server(
             chiper._seq = current_sequence - 1
             response_data, seq = chiper.encrypt('{"error_code": 0, "result": []}')
             return _mock_aiohttp_response(200, response_data)
+        return None
 
     return _return_response
 
